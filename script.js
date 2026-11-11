@@ -102,6 +102,15 @@ confirmInput.addEventListener('input', () => {
   updateSubmitButtonState();
 });
 
+[[phoneInput, phoneError], [passwordInput, passwordError], [confirmInput, confirmError]]
+  .forEach(([input, error]) => {
+    input.addEventListener('blur', () => {
+      if (input.value.length === 0) {
+        error.textContent = 'Обязательное поле';
+      }
+    });
+  });
+
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   if (isFormValid()) {
