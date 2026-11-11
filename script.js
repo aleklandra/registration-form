@@ -22,7 +22,7 @@ function getPasswordStrength(value) {
   let score = 0;
   if (value.length >= 8) score++;
   if (/[0-9]/.test(value)) score++;
-  if (/[^a-zA-Z0-9]/.test(value)) score++;
+  if (/[^\p{L}\p{N}\s]/u.test(value)) score++;
   if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
 
   if (score <= 1) return 1;
@@ -31,7 +31,7 @@ function getPasswordStrength(value) {
 }
 
 function isPasswordValid(value) {
-  return getPasswordStrength(value) >= 2 && value.length >= 8;
+  return value.length >= 8 && (/[0-9]/.test(value) || /[^\p{L}\p{N}\s]/u.test(value));
 }
 
 function doPasswordsMatch(password, confirm) {
