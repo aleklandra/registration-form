@@ -9,7 +9,7 @@
 <body>
   <div class="form-container">
     <h1>Регистрация</h1>
-    <form id="signupForm" novalidate>
+    <form id="signupForm" method="post" novalidate>
       <div class="field">
         <label for="phone">Телефон</label>
         <input type="text" id="phone" name="phone" placeholder="+79991234567">
@@ -32,7 +32,7 @@
         <span class="error" id="confirmError"></span>
       </div>
 
-      <button type="submit" id="submitBtn">Зарегистрироваться</button>
+      <button type="submit" id="submitBtn" disabled>Зарегистрироваться</button>
     </form>
     <div class="success" id="successMessage" role="status" hidden></div>
   </div>

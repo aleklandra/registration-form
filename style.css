@@ -92,7 +92,12 @@ button {
   margin-top: 8px;
 }
 
-button:hover {
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button:not(:disabled):hover {
   background: #3a5ce4;
 }
 
