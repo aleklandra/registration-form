@@ -18,11 +18,12 @@
 
       <div class="field">
         <label for="password">Пароль</label>
-        <input type="password" id="password" name="password" placeholder="Минимум 8 символов" aria-describedby="passwordError">
-        <div class="strength-meter">
-          <div class="strength-bar" id="strengthBar"></div>
-        </div>
-        <span class="strength-label" id="strengthLabel"></span>
+        <input type="password" id="password" name="password" placeholder="Минимум 8 символов" aria-describedby="passwordRequirements passwordError">
+        <ul class="password-requirements" id="passwordRequirements" hidden>
+          <li class="requirement" id="lengthRequirement"><span class="requirement-icon" aria-hidden="true">✕</span> Минимум 8 символов<span class="requirement-status"> — не выполнено</span></li>
+          <li class="requirement" id="digitRequirement"><span class="requirement-icon" aria-hidden="true">✕</span> Цифра<span class="requirement-status"> — не выполнено</span></li>
+          <li class="requirement" id="specialRequirement"><span class="requirement-icon" aria-hidden="true">✕</span> Спецсимвол<span class="requirement-status"> — не выполнено</span></li>
+        </ul>
         <span class="error" id="passwordError" aria-live="polite" aria-atomic="true"></span>
       </div>
 

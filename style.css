@@ -58,26 +58,32 @@ input:focus {
   min-height: 14px;
 }
 
-.strength-meter {
-  height: 6px;
-  background: #eaeaea;
-  border-radius: 4px;
-  margin-top: 8px;
-  overflow: hidden;
-}
-
-.strength-bar {
-  height: 100%;
-  width: 0%;
-  background: #e5484d;
-  transition: width 0.3s ease, background 0.3s ease;
-}
-
-.strength-label {
-  display: block;
+.password-requirements {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
   font-size: 12px;
-  margin-top: 4px;
-  color: #666;
+  color: #333;
+}
+
+.password-requirements .requirement {
+  color: #e5484d;
+}
+
+.password-requirements .fulfilled {
+  color: #1a7f37;
+}
+
+.requirement-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 button {

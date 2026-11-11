@@ -9,29 +9,25 @@ const passwordError = document.getElementById('passwordError');
 const confirmError = document.getElementById('confirmError');
 const successMessage = document.getElementById('successMessage');
 
-const strengthBar = document.getElementById('strengthBar');
-const strengthLabel = document.getElementById('strengthLabel');
+const passwordRequirements = document.getElementById('passwordRequirements');
+const lengthRequirement = document.getElementById('lengthRequirement');
+const digitRequirement = document.getElementById('digitRequirement');
+const specialRequirement = document.getElementById('specialRequirement');
 
 function validatePhone(value) {
   return /^\+7[0-9]{10}$/.test(value);
 }
 
-function getPasswordStrength(value) {
-  if (value.length === 0) return 0;
+function hasDigit(value) {
+  return /[0-9]/.test(value);
+}
 
-  let score = 0;
-  if (value.length >= 8) score++;
-  if (/[0-9]/.test(value)) score++;
-  if (/[^\p{L}\p{N}\s]/u.test(value)) score++;
-  if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
-
-  if (score <= 1) return 1;
-  if (score <= 2) return 2;
-  return 3;
+function hasSpecialCharacter(value) {
+  return /[^\p{L}\p{N}\s]/u.test(value);
 }
 
 function isPasswordValid(value) {
-  return value.length >= 8 && (/[0-9]/.test(value) || /[^\p{L}\p{N}\s]/u.test(value));
+  return value.length >= 8 && hasDigit(value) && hasSpecialCharacter(value);
 }
 
 function doPasswordsMatch(password, confirm) {
@@ -39,14 +35,13 @@ function doPasswordsMatch(password, confirm) {
 }
 
 function updateStrengthUI(value) {
-  const strength = getPasswordStrength(value);
-  const widths = ['0%', '33%', '66%', '100%'];
-  const colors = ['#eaeaea', '#e5484d', '#f5a623', '#1a7f37'];
-  const labels = ['', 'Слабый', 'Средний', 'Сильный'];
-
-  strengthBar.style.width = widths[strength];
-  strengthBar.style.background = colors[strength];
-  strengthLabel.textContent = labels[strength];
+  passwordRequirements.hidden = value.length === 0;
+  [[lengthRequirement, value.length >= 8], [digitRequirement, hasDigit(value)], [specialRequirement, hasSpecialCharacter(value)]]
+    .forEach(([requirement, fulfilled]) => {
+      requirement.classList.toggle('fulfilled', fulfilled);
+      requirement.querySelector('.requirement-icon').textContent = fulfilled ? '✓' : '✕';
+      requirement.querySelector('.requirement-status').textContent = fulfilled ? ' — выполнено' : ' — не выполнено';
+    });
 }
 
 function isFormValid() {
@@ -85,12 +80,9 @@ phoneInput.addEventListener('input', () => {
 passwordInput.addEventListener('input', () => {
   updateStrengthUI(passwordInput.value);
 
-  if (passwordInput.value.length === 0) {
-    setError(passwordInput, passwordError, '');
-  } else if (!isPasswordValid(passwordInput.value)) {
-    setError(passwordInput, passwordError, 'Пароль слишком слабый: минимум 8 символов, добавьте цифры или спецсимволы');
-  } else {
-    setError(passwordInput, passwordError, '');
+  setError(passwordInput, passwordError, '');
+  if (passwordInput.value.length > 0 && !isPasswordValid(passwordInput.value)) {
+    passwordInput.setAttribute('aria-invalid', 'true');
   }
 
   if (confirmInput.value.length > 0) {
@@ -113,7 +105,7 @@ confirmInput.addEventListener('input', () => {
   updateSubmitButtonState();
 });
 
-[[phoneInput, phoneError], [passwordInput, passwordError], [confirmInput, confirmError]]
+[[phoneInput, phoneError], [confirmInput, confirmError]]
   .forEach(([input, error]) => {
     input.addEventListener('blur', () => {
       if (input.value.length === 0) {
