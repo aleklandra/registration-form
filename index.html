@@ -3,40 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Форма регистрации — учебный проект</title>
+  <meta name="theme-color" content="#14121d">
+  <meta name="description" content="Учебная форма регистрации с анимированным котом и конфетти.">
+  <title>Форма регистрации</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="form-container">
-    <h1>Регистрация</h1>
-    <form id="signupForm" novalidate>
-      <div class="field">
-        <label for="phone">Телефон</label>
-        <input type="text" id="phone" name="phone" placeholder="+79991234567">
-        <span class="error" id="phoneError"></span>
-      </div>
-
-      <div class="field">
-        <label for="password">Пароль</label>
-        <input type="password" id="password" name="password" placeholder="Минимум 8 символов">
-        <div class="strength-meter">
-          <div class="strength-bar" id="strengthBar"></div>
+  <div class="backdrop" aria-hidden="true"></div>
+  <div id="particles" class="particles" aria-hidden="true"></div>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Форма регистрации — главная"><span class="brand-icon" aria-hidden="true">✳</span> GROUP 04</a>
+      <button class="motion-toggle" id="motionToggle" type="button" aria-pressed="true">Анимации: вкл.</button>
+    </header>
+    <main class="layout">
+      <section class="intro" aria-label="Анимированный кот">
+        <div class="mascot-scene">
+          <button class="cat" id="catButton" type="button" aria-label="Погладить кота">
+            <svg viewBox="0 0 180 170" aria-hidden="true">
+              <path class="cat-tail" d="M125 140 Q174 149 159 105" fill="none" stroke="#d5ff70" stroke-width="15" stroke-linecap="round"/>
+              <path d="M45 112 Q37 145 59 153 L126 153 Q145 135 124 110" fill="#d5ff70"/>
+              <path d="M39 72 L35 16 L77 46 Q94 41 109 47 L148 16 L143 79 Q151 126 91 130 Q28 128 39 72Z" fill="#d5ff70" stroke="#17151e" stroke-width="4" stroke-linejoin="round"/>
+              <path d="M47 36 L50 62 L66 50 M135 36 L122 51 L136 63" fill="#eaa2fd"/>
+              <g class="cat-eyes" fill="#17151e"><ellipse cx="66" cy="84" rx="6" ry="10"/><ellipse cx="116" cy="84" rx="6" ry="10"/></g>
+              <g class="cat-closed" fill="none" stroke="#17151e" stroke-width="4" stroke-linecap="round"><path d="M58 87 L74 87 M108 87 L124 87"/></g>
+              <path d="M86 98 L96 98 L91 104Z" fill="#17151e"/>
+              <path d="M91 104 Q82 115 76 106 M91 104 Q100 115 106 106 M30 92 L50 96 M30 105 L50 103 M132 96 L154 92 M132 103 L154 105" fill="none" stroke="#17151e" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <p id="catMessage" class="sr-only" role="status"></p>
+          <span class="orbit-star" aria-hidden="true">✧</span>
         </div>
-        <span class="strength-label" id="strengthLabel"></span>
-        <span class="error" id="passwordError"></span>
-      </div>
-
-      <div class="field">
-        <label for="confirmPassword">Повторите пароль</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Повторите пароль">
-        <span class="error" id="confirmError"></span>
-      </div>
-
-      <button type="submit" id="submitBtn">Зарегистрироваться</button>
-      <div class="success" id="successMessage"></div>
-    </form>
+      </section>
+      <section class="form-container" aria-labelledby="formTitle">
+        <h1 id="formTitle">Регистрация</h1>
+        <form id="signupForm" novalidate>
+          <div class="field">
+            <label for="phone"><span class="field-index">01</span> Телефон</label>
+            <input type="tel" inputmode="tel" autocomplete="tel" id="phone" name="phone" placeholder="+7 (999) 123-45-67" aria-describedby="phoneError" required>
+            <span class="error" id="phoneError" aria-live="polite"></span>
+          </div>
+          <div class="field">
+            <label for="password"><span class="field-index">02</span> Пароль</label>
+            <input type="password" autocomplete="new-password" id="password" name="password" placeholder="Минимум 8 символов" aria-describedby="passwordHint passwordError strengthLabel" required>
+            <div class="strength-meter" aria-hidden="true"><div class="strength-bar" id="strengthBar"></div></div>
+            <div class="password-meta"><span id="passwordHint">Цифры, символы или разный регистр</span><span id="strengthLabel" aria-live="polite"></span></div>
+            <span class="error" id="passwordError" aria-live="polite"></span>
+          </div>
+          <div class="field">
+            <label for="confirmPassword"><span class="field-index">03</span> Повторите пароль</label>
+            <input type="password" autocomplete="new-password" id="confirmPassword" name="confirmPassword" placeholder="Повторите пароль" aria-describedby="confirmError" required>
+            <span class="error" id="confirmError" aria-live="polite"></span>
+          </div>
+          <button class="submit" type="submit" id="submitBtn" disabled><span>Зарегистрироваться</span><span aria-hidden="true">↗</span></button>
+          <div class="success" id="successMessage" role="status"></div>
+          <p class="demo-note">Демо · данные не отправляются</p>
+        </form>
+      </section>
+    </main>
+    <footer><span>Илья Зайцев · Иван Гриценко · Даниил Петров</span><span class="footer-mark" aria-hidden="true">✳</span></footer>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
