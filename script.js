@@ -60,13 +60,24 @@ function updateSubmitButtonState() {
   submitBtn.disabled = !isFormValid();
 }
 
+function setError(input, error, message) {
+  if (message) {
+    input.setAttribute('aria-invalid', 'true');
+  } else {
+    input.removeAttribute('aria-invalid');
+  }
+  if (error.textContent !== message) {
+    error.textContent = message;
+  }
+}
+
 phoneInput.addEventListener('input', () => {
   if (phoneInput.value.length === 0) {
-    phoneError.textContent = '';
+    setError(phoneInput, phoneError, '');
   } else if (!validatePhone(phoneInput.value)) {
-    phoneError.textContent = 'Введите номер в формате +7XXXXXXXXXX (11 цифр)';
+    setError(phoneInput, phoneError, 'Введите номер в формате +7XXXXXXXXXX (11 цифр)');
   } else {
-    phoneError.textContent = '';
+    setError(phoneInput, phoneError, '');
   }
   updateSubmitButtonState();
 });
@@ -75,17 +86,17 @@ passwordInput.addEventListener('input', () => {
   updateStrengthUI(passwordInput.value);
 
   if (passwordInput.value.length === 0) {
-    passwordError.textContent = '';
+    setError(passwordInput, passwordError, '');
   } else if (!isPasswordValid(passwordInput.value)) {
-    passwordError.textContent = 'Пароль слишком слабый: минимум 8 символов, добавьте цифры или спецсимволы';
+    setError(passwordInput, passwordError, 'Пароль слишком слабый: минимум 8 символов, добавьте цифры или спецсимволы');
   } else {
-    passwordError.textContent = '';
+    setError(passwordInput, passwordError, '');
   }
 
   if (confirmInput.value.length > 0) {
-    confirmError.textContent = doPasswordsMatch(passwordInput.value, confirmInput.value)
+    setError(confirmInput, confirmError, doPasswordsMatch(passwordInput.value, confirmInput.value)
       ? ''
-      : 'Пароли не совпадают';
+      : 'Пароли не совпадают');
   }
 
   updateSubmitButtonState();
@@ -93,11 +104,11 @@ passwordInput.addEventListener('input', () => {
 
 confirmInput.addEventListener('input', () => {
   if (confirmInput.value.length === 0) {
-    confirmError.textContent = '';
+    setError(confirmInput, confirmError, '');
   } else if (!doPasswordsMatch(passwordInput.value, confirmInput.value)) {
-    confirmError.textContent = 'Пароли не совпадают';
+    setError(confirmInput, confirmError, 'Пароли не совпадают');
   } else {
-    confirmError.textContent = '';
+    setError(confirmInput, confirmError, '');
   }
   updateSubmitButtonState();
 });
@@ -106,7 +117,7 @@ confirmInput.addEventListener('input', () => {
   .forEach(([input, error]) => {
     input.addEventListener('blur', () => {
       if (input.value.length === 0) {
-        error.textContent = 'Обязательное поле';
+        setError(input, error, 'Обязательное поле');
       }
     });
   });

@@ -12,24 +12,24 @@
     <form id="signupForm" method="post" novalidate>
       <div class="field">
         <label for="phone">Телефон</label>
-        <input type="text" id="phone" name="phone" placeholder="+79991234567">
-        <span class="error" id="phoneError"></span>
+        <input type="text" id="phone" name="phone" placeholder="+79991234567" aria-describedby="phoneError">
+        <span class="error" id="phoneError" aria-live="polite" aria-atomic="true"></span>
       </div>
 
       <div class="field">
         <label for="password">Пароль</label>
-        <input type="password" id="password" name="password" placeholder="Минимум 8 символов">
+        <input type="password" id="password" name="password" placeholder="Минимум 8 символов" aria-describedby="passwordError">
         <div class="strength-meter">
           <div class="strength-bar" id="strengthBar"></div>
         </div>
         <span class="strength-label" id="strengthLabel"></span>
-        <span class="error" id="passwordError"></span>
+        <span class="error" id="passwordError" aria-live="polite" aria-atomic="true"></span>
       </div>
 
       <div class="field">
         <label for="confirmPassword">Повторите пароль</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Повторите пароль">
-        <span class="error" id="confirmError"></span>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Повторите пароль" aria-describedby="confirmError">
+        <span class="error" id="confirmError" aria-live="polite" aria-atomic="true"></span>
       </div>
 
       <button type="submit" id="submitBtn" disabled>Зарегистрироваться</button>
