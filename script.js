@@ -107,7 +107,10 @@ confirmInput.addEventListener('input', () => {
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   if (isFormValid()) {
-    successMessage.textContent = 'Регистрация прошла успешно!';
+    form.parentElement.style.minHeight = `${form.parentElement.getBoundingClientRect().height}px`;
+    form.hidden = true;
+    successMessage.textContent = 'Поздравляем, вы зарегистрированы!';
+    successMessage.hidden = false;
   }
 });
 
