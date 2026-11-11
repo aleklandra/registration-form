@@ -13,10 +13,17 @@ const strengthBar = document.getElementById('strengthBar');
 const strengthLabel = document.getElementById('strengthLabel');
 
 function validatePhone(value) {
-  const digitsOnly = value.replace(/\D/g, '');
-  const isValidLength = digitsOnly.length >= 9;
-  const startsCorrectly = digitsOnly.startsWith('7') || digitsOnly.startsWith('8');
-  return isValidLength && startsCorrectly;
+  return /^\+7[0-9]{10}$/.test(value);
+}
+
+function normalizePhone(value) {
+  const digits = value.replace(/[^0-9]/g, '');
+  if (digits.length === 0) {
+    return value.includes('+') ? '+7' : '';
+  }
+
+  const nationalNumber = /^[78]/.test(digits) ? digits.slice(1) : digits;
+  return '+7' + nationalNumber.slice(0, 10);
 }
 
 function getPasswordStrength(value) {
@@ -66,6 +73,17 @@ function updateSubmitButtonState() {
 }
 
 phoneInput.addEventListener('input', () => {
+  const cursor = phoneInput.selectionStart;
+  const value = phoneInput.value;
+  const normalized = normalizePhone(value);
+  if (value !== normalized) {
+    phoneInput.value = normalized;
+    if (cursor !== null) {
+      const position = normalizePhone(value.slice(0, cursor)).length;
+      phoneInput.setSelectionRange(position, position);
+    }
+  }
+
   if (phoneInput.value.length === 0) {
     phoneError.textContent = '';
   } else if (!validatePhone(phoneInput.value)) {

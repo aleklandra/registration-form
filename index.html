@@ -12,7 +12,7 @@
     <form id="signupForm" novalidate>
       <div class="field">
         <label for="phone">Телефон</label>
-        <input type="text" id="phone" name="phone" placeholder="+79991234567">
+        <input type="tel" id="phone" name="phone" inputmode="numeric" autocomplete="tel" pattern="\+7[0-9]{10}" placeholder="+79991234567" aria-describedby="phoneError">
         <span class="error" id="phoneError"></span>
       </div>
 
