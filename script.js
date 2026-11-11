@@ -15,7 +15,42 @@ const digitRequirement = document.getElementById('digitRequirement');
 const specialRequirement = document.getElementById('specialRequirement');
 
 function validatePhone(value) {
-  return /^\+7[0-9]{10}$/.test(value);
+  return /^\+7\([0-9]{3}\)[0-9]{3}-[0-9]{2}-[0-9]{2}$/.test(value);
+}
+
+function formatPhone(digits) {
+  const number = digits.slice(0, 10);
+  let formatted = '+7';
+  if (number.length > 0) formatted += '(' + number.slice(0, 3);
+  if (number.length >= 3) formatted += ')';
+  if (number.length > 3) formatted += number.slice(3, 6);
+  if (number.length > 6) formatted += '-' + number.slice(6, 8);
+  if (number.length > 8) formatted += '-' + number.slice(8, 10);
+  return formatted;
+}
+
+function formatPhoneInput() {
+  const value = phoneInput.value;
+  if (!value) return;
+  const caret = phoneInput.selectionStart;
+  const digits = value.replace(/\D/g, '');
+  const hasPrefix = value.startsWith('+7');
+  const number = hasPrefix ? digits.slice(1) : digits;
+  const digitsBeforeCaret = value.slice(0, caret).replace(/\D/g, '').length - (hasPrefix ? 1 : 0);
+  const formatted = formatPhone(number);
+  phoneInput.value = formatted;
+
+  if (caret === value.length) {
+    phoneInput.setSelectionRange(formatted.length, formatted.length);
+  } else {
+    let position = 2;
+    let remaining = Math.max(0, digitsBeforeCaret);
+    while (position < formatted.length && remaining > 0) {
+      if (/[0-9]/.test(formatted[position])) remaining--;
+      position++;
+    }
+    phoneInput.setSelectionRange(position, position);
+  }
 }
 
 function hasDigit(value) {
@@ -66,15 +101,50 @@ function setError(input, error, message) {
   }
 }
 
+phoneInput.addEventListener('focus', () => {
+  if (!phoneInput.value) phoneInput.value = '+7';
+});
+
+phoneInput.addEventListener('beforeinput', (event) => {
+  if (!['deleteContentBackward', 'deleteContentForward'].includes(event.inputType)) return;
+  const start = phoneInput.selectionStart;
+  const end = phoneInput.selectionEnd;
+  if (start !== end) return;
+  const backward = event.inputType === 'deleteContentBackward';
+  let position = backward ? start - 1 : start;
+  if (position < 2 || position >= phoneInput.value.length || /[0-9]/.test(phoneInput.value[position])) return;
+  while (position >= 2 && position < phoneInput.value.length && !/[0-9]/.test(phoneInput.value[position])) {
+    position += backward ? -1 : 1;
+  }
+  if (position < 2 || position >= phoneInput.value.length) return;
+  event.preventDefault();
+  phoneInput.setRangeText('', position, position + 1, 'start');
+  phoneInput.dispatchEvent(new Event('input', { bubbles: true }));
+});
+
+phoneInput.addEventListener('paste', (event) => {
+  const digits = event.clipboardData.getData('text').replace(/\D/g, '');
+  if (digits.length === 11 && (digits.startsWith('7') || digits.startsWith('8'))) {
+    event.preventDefault();
+    phoneInput.value = formatPhone(digits.slice(1));
+    phoneInput.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+});
+
 phoneInput.addEventListener('input', () => {
+  formatPhoneInput();
   if (phoneInput.value.length === 0) {
     setError(phoneInput, phoneError, '');
   } else if (!validatePhone(phoneInput.value)) {
-    setError(phoneInput, phoneError, 'Введите номер в формате +7XXXXXXXXXX (11 цифр)');
+    setError(phoneInput, phoneError, 'Введите номер в формате +7(XXX)XXX-XX-XX');
   } else {
     setError(phoneInput, phoneError, '');
   }
   updateSubmitButtonState();
+});
+
+phoneInput.addEventListener('blur', () => {
+  if (phoneInput.value === '+7') phoneInput.value = '';
 });
 
 passwordInput.addEventListener('input', () => {
